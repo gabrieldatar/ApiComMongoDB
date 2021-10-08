@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace ApiComMongoDB.Data.Collections
 {
