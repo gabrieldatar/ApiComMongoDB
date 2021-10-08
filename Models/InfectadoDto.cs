@@ -2,7 +2,7 @@ using System;
 
 namespace ApiComMongoDB.Models
 {
-    public class InfectadorDto
+    public class InfectadoDto
     {
         public DateTime DataNascimento{get;set;}
 
