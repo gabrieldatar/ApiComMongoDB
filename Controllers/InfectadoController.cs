@@ -3,6 +3,7 @@ using ApiComMongoDB.Data;
 using MongoDB.Driver;
 using ApiComMongoDB.Data.Collections;
 using ApiComMongoDB.Models;
+using System;
 
 namespace ApiComMongoDB.Controllers
 {
@@ -23,7 +24,7 @@ namespace ApiComMongoDB.Controllers
         [HttpPost]
         public ActionResult SalvarInfectado([FromBody]InfectadoDto dto)
         {
-            var infectado=new Infectado(dto.DataNascimento,dto.Sexo,dto.latitude,dto.Longitude);
+            var infectado=new Infectado(dto.DataNascimento,dto.Sexo,dto.Latitude,dto.Longitude);
 
             _infectadosCollection.InsertOne(infectado);
 
@@ -36,6 +37,23 @@ namespace ApiComMongoDB.Controllers
             var infectados=_infectadosCollection.Find(Builders<Infectado>.Filter.Empty).ToList();
 
             return Ok(infectados);
-        }            
+        }
+
+        // O ideial seria o HttpPatch
+        [HttpPut]
+        public ActionResult AtualizarInfectado([FromBody]InfectadoDto dto)
+        {
+            _infectadosCollection.UpdateOne(Builders<Infectado>.Filter.Where(_ =>_.DataNascimento==dto.DataNascimento),Builders<Infectado>.Update.Set("sexo",dto.Sexo));
+
+            return Ok("Atualizado com sucesso");
+        }
+
+        [HttpDelete("{dataNasc}")]
+        public ActionResult DeleteInfectado(DateTime dataNasc)
+        {
+            _infectadosCollection.DeleteOne(Builders<Infectado>.Filter.Where(_ =>_.DataNascimento==dataNasc));
+
+            return Ok("Deletado com sucesso");
+        }
     }
 }
